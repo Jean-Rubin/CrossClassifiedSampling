@@ -38,6 +38,23 @@ Base.@kwdef struct RatioMixSimple
     μ_y::Float64
 end
 
+# 3 dimensional population
+Base.@kwdef struct PopParam3D
+    N_1::Int64
+    N_2::Int64
+    N_3::Int64
+end
+
+Base.@kwdef struct Model3D
+    μ::Float64
+    σ_1::Float64
+    σ_2::Float64
+    σ_3::Float64
+    σ_12::Float64
+    σ_13::Float64
+    σ_23::Float64
+    σ_123::Float64
+end
 
 # --------------------------------------------------
 # Model generation design
@@ -114,6 +131,22 @@ function generate(model::RatioMixSimple, param::PopParam)
 
     @. Y[:, :, 1] = model.μ_x + model.α * Z₁ + (1 - model.α) * Z₂
     @. Y[:, :, 2] = model.μ_y + model.β * Z₁ + (1 - model.β) * Z₃
+
+    return Y
+end
+
+function generate(model::Model3D, param::PopParam3D)
+    U_1 = rand(Normal(0, model.σ_1), param.N_1, 1, 1)
+    U_2 = rand(Normal(0, model.σ_2), 1, param.N_2, 1)
+    U_3 = rand(Normal(0, model.σ_3), 1, 1, param.N_3)
+    U_12 = rand(Normal(0, model.σ_12), param.N_1, param.N_2, 1)
+    U_13 = rand(Normal(0, model.σ_13), param.N_1, 1, param.N_3)
+    U_23 = rand(Normal(0, model.σ_23), 1, param.N_2, param.N_3)
+    U_123 = rand(Normal(0, model.σ_123), param.N_1, param.N_2, param.N_3)
+
+    Y = Array{Float64, 4}(undef, param.N_1, param.N_2, param.N_3, 1)
+
+    @. Y[:, :, :, 1] = model.μ + U_1 + U_2 + U_3 + U_12 + U_13 + U_23 + U_123
 
     return Y
 end

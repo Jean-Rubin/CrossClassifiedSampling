@@ -1,10 +1,11 @@
 using CCS: BaseModel, PopParam, RatioMixSimple
 using CCS: generate, simulate_completely, simulate_completely_var, value, ratio
+using CCS: Model3D, PopParam3D
+using CCS: simulate_completely_3d, simulate_completely_var_3d
 
 function test_normal(σ_RC, n_R, n_C)
     @show σ_RC 
-    @show n_R 
-    @show n_C 
+    @show n_R, n_C 
     Y = generate(
         BaseModel(μ = 200, σ_R = 5, σ_C = 5, σ_RC = σ_RC),
         PopParam(N_R = 1000, N_C = 1000)
@@ -91,3 +92,34 @@ test_ratio_mix_simple(0.8, 10, 100)
 test_ratio_mix_simple(0.8, 100, 100)
 test_ratio_mix_simple(0.8, 500, 500)
 
+function test_normal_3d(σ_1, σ_12, σ_123, n_1, n_2, n_3)
+    @show σ_1, σ_12, σ_123
+    @show n_1, n_2, n_3 
+    Y = generate(
+        Model3D(μ = 200, σ_1 = σ_1, σ_2 = 5, σ_3 = 5, σ_12 = σ_12, σ_13 = 5, σ_23 = 5, σ_123 = σ_123),
+        PopParam3D(N_1 = 1000, N_2 = 100, N_3 = 100)
+    )
+
+    nb_iter = 10000
+    B = 1000
+
+    simulate_completely_var_3d(
+    [Val(:Var1), Val(:Var2), Val(:Var3)],
+        Y, value, n_1, n_2, n_3, nb_iter, B
+    )
+
+    simulate_completely_3d(
+        [Val(:Gross), Val(:RaoWu), Val(:Skinner)],
+        [Val(:StdNormal), Val(:Percentile), Val(:RevPercentile)],
+        Y, value, n_1, n_2, n_3, nb_iter, B
+    )
+end
+
+
+test_normal_3d(5, 5, 5, 10, 10, 10)
+test_normal_3d(5, 5, 5, 100, 10, 10)
+test_normal_3d(5, 5, 5, 500, 10, 10)
+test_normal_3d(5, 10, 5, 100, 10, 10)
+test_normal_3d(5, 20, 5, 100, 10, 10)
+test_normal_3d(5, 5, 10, 100, 10, 10)
+test_normal_3d(5, 5, 20, 100, 10, 10)
