@@ -115,11 +115,18 @@ function test_normal_3d(σ_1, σ_12, σ_123, n_1, n_2, n_3)
     )
 end
 
-
-test_normal_3d(5, 5, 5, 10, 10, 10)
-test_normal_3d(5, 5, 5, 100, 10, 10)
-test_normal_3d(5, 5, 5, 500, 10, 10)
-test_normal_3d(5, 10, 5, 100, 10, 10)
-test_normal_3d(5, 20, 5, 100, 10, 10)
-test_normal_3d(5, 5, 10, 100, 10, 10)
-test_normal_3d(5, 5, 20, 100, 10, 10)
+open("res_3d.txt", "w") do out
+    redirect_stdout(out) do
+    test_normal_3d(5, 5, 5, 10, 10, 10)
+    test_normal_3d(5, 5, 5, 100, 10, 10)
+    test_normal_3d(5, 5, 5, 500, 10, 10)
+    test_normal_3d(5, 5, 5, 500, 50, 50)
+    test_normal_3d(5, 10, 5, 100, 10, 10)
+    test_normal_3d(5, 20, 5, 100, 10, 10)
+    test_normal_3d(5, 20, 5, 100, 50, 50)
+    test_normal_3d(5, 5, 10, 100, 10, 10)
+    test_normal_3d(5, 5, 10, 100, 50, 50)
+    test_normal_3d(5, 5, 20, 100, 10, 10)
+    test_normal_3d(5, 5, 20, 100, 50, 50)
+    end
+end
