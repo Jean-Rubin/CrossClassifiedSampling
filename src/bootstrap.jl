@@ -269,9 +269,9 @@ function estimate_var_3d(method::Val{:Var1}, Y_sample, N_1, N_2, N_3, func::Func
     V_hat_12 = sum((Y_sample_mean_3 .- Y_sample_mean_13 .- Y_sample_mean_23 .+ Y_sample_mean_123).^2, dims = (1, 2, 3)) / ((n_1 - 1) * (n_2 - 1)) - (1 - f_3) * V_hat_123 / n_3
     V_hat_13 = sum((Y_sample_mean_2 .- Y_sample_mean_12 .- Y_sample_mean_23 .+ Y_sample_mean_123).^2, dims = (1, 2, 3)) / ((n_1 - 1) * (n_3 - 1)) - (1 - f_2) * V_hat_123 / n_2
     V_hat_23 = sum((Y_sample_mean_1 .- Y_sample_mean_12 .- Y_sample_mean_13 .+ Y_sample_mean_123).^2, dims = (1, 2, 3)) / ((n_2 - 1) * (n_3 - 1)) - (1 - f_1) * V_hat_123 / n_1
-    V_hat_1 = sum((Y_sample_mean_23 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_1 - 1) - (1 - f_2) * V_hat_12 / n_2 - (1 - f_3) * V_hat_13 / n_3 + (1 - f_2) * (1 - f_3) * V_hat_123 / (n_2 * n_3) 
-    V_hat_2 = sum((Y_sample_mean_13 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_2 - 1) - (1 - f_1) * V_hat_12 / n_1 - (1 - f_3) * V_hat_23 / n_3 + (1 - f_1) * (1 - f_3) * V_hat_123 / (n_1 * n_3)
-    V_hat_3 = sum((Y_sample_mean_12 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_3 - 1) - (1 - f_1) * V_hat_13 / n_1 - (1 - f_2) * V_hat_23 / n_2 + (1 - f_1) * (1 - f_2) * V_hat_123 / (n_1 * n_2)
+    V_hat_1 = sum((Y_sample_mean_23 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_1 - 1) - (1 - f_2) * V_hat_12 / n_2 - (1 - f_3) * V_hat_13 / n_3 - (1 - f_2) * (1 - f_3) * V_hat_123 / (n_2 * n_3) 
+    V_hat_2 = sum((Y_sample_mean_13 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_2 - 1) - (1 - f_1) * V_hat_12 / n_1 - (1 - f_3) * V_hat_23 / n_3 - (1 - f_1) * (1 - f_3) * V_hat_123 / (n_1 * n_3)
+    V_hat_3 = sum((Y_sample_mean_12 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_3 - 1) - (1 - f_1) * V_hat_13 / n_1 - (1 - f_2) * V_hat_23 / n_2 - (1 - f_1) * (1 - f_2) * V_hat_123 / (n_1 * n_2)
 
     V_hat_all = (N_1 * N_2 * N_3)^2 * (
         (1 - f_1) * V_hat_1 / n_1 +
@@ -306,9 +306,9 @@ function estimate_var_3d(method::Val{:Var2}, Y_sample, N_1, N_2, N_3, func::Func
     V_hat_12 = sum((Y_sample_mean_3 .- Y_sample_mean_13 .- Y_sample_mean_23 .+ Y_sample_mean_123).^2, dims = (1, 2, 3)) / ((n_1 - 1) * (n_2 - 1)) - (1 - f_3) * V_hat_123 / n_3
     V_hat_13 = sum((Y_sample_mean_2 .- Y_sample_mean_12 .- Y_sample_mean_23 .+ Y_sample_mean_123).^2, dims = (1, 2, 3)) / ((n_1 - 1) * (n_3 - 1)) - (1 - f_2) * V_hat_123 / n_2
     V_hat_23 = sum((Y_sample_mean_1 .- Y_sample_mean_12 .- Y_sample_mean_13 .+ Y_sample_mean_123).^2, dims = (1, 2, 3)) / ((n_2 - 1) * (n_3 - 1)) - (1 - f_1) * V_hat_123 / n_1
-    V_hat_1 = sum((Y_sample_mean_23 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_1 - 1) - (1 - f_2) * V_hat_12 / n_2 - (1 - f_3) * V_hat_13 / n_3 + (1 - f_2) * (1 - f_3) * V_hat_123 / (n_2 * n_3) 
-    V_hat_2 = sum((Y_sample_mean_13 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_2 - 1) - (1 - f_1) * V_hat_12 / n_1 - (1 - f_3) * V_hat_23 / n_3 + (1 - f_1) * (1 - f_3) * V_hat_123 / (n_1 * n_3)
-    V_hat_3 = sum((Y_sample_mean_12 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_3 - 1) - (1 - f_1) * V_hat_13 / n_1 - (1 - f_2) * V_hat_23 / n_2 + (1 - f_1) * (1 - f_2) * V_hat_123 / (n_1 * n_2)
+    V_hat_1 = sum((Y_sample_mean_23 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_1 - 1) - (1 - f_2) * V_hat_12 / n_2 - (1 - f_3) * V_hat_13 / n_3 - (1 - f_2) * (1 - f_3) * V_hat_123 / (n_2 * n_3) 
+    V_hat_2 = sum((Y_sample_mean_13 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_2 - 1) - (1 - f_1) * V_hat_12 / n_1 - (1 - f_3) * V_hat_23 / n_3 - (1 - f_1) * (1 - f_3) * V_hat_123 / (n_1 * n_3)
+    V_hat_3 = sum((Y_sample_mean_12 .- Y_sample_mean_123).^2, dims = (1, 2, 3)) / (n_3 - 1) - (1 - f_1) * V_hat_13 / n_1 - (1 - f_2) * V_hat_23 / n_2 - (1 - f_1) * (1 - f_2) * V_hat_123 / (n_1 * n_2)
 
 
     V_hat_all = (N_1 * N_2 * N_3)^2 * (
